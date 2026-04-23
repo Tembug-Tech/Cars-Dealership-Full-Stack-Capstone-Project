@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./car_dealership_backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=your-secret-key-change-in-production
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+    volumes:
+      - ./car_dealership_backend:/app
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py seed_data &&
+             gunicorn --bind 0.0.0.0:8000 car_dealership.wsgi:application"
+    networks:
+      - dealership-network
+    depends_on: []
+
+  frontend:
+    build:
+      context: ./car_dealership_frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    volumes:
+      - ./car_dealership_frontend:/app
+      - /app/node_modules
+    networks:
+      - dealership-network
+    depends_on:
+      - backend
+
+
+
+networks:
+  dealership-network:
+    driver: bridge
