@@ -1,6 +1,6 @@
-# Cars Dealership Web Application
+# Cars Dealership Web Application by Tembug Tech
 
-A full-stack web application for managing car dealers and reviews with sentiment analysis.
+A full-stack web application for managing car dealers and reviews with sentiment analysis, developed by **Tembug Tech**.
 
 ## Tech Stack
 
